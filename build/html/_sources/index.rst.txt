@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Project D's documentation!
+Welcome to Project D!
 =====================================
 
 .. toctree::
@@ -11,6 +11,8 @@ Welcome to Project D's documentation!
    :caption: Contents:
 
    intro
+   python/py_index.rst
+   webdev/web_index.rst
    database/db_index.rst
 
 

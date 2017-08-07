@@ -16,21 +16,6 @@ Create Autoincre Sequence
 Although any name for the sequence can be used, convention is to use 
 ``TABLE_NAME + COLUMN_NAME + 'seq'``.
 
-Transpose Results
------------------
-
-.. code-block:: psql
-
-	SELECT mm.*, 
-		array_to_string(array_agg(mt.tendertypenamezh),',') AS tender,
-		array_to_string(array_agg(mt.amount),',') AS tenderamount
-	FROM transaction_memo mm 
-	LEFT OUTER JOIN memotender mt ON mt.memopk = mm.pk
-	WHERE  valid = 't'
-	GROUP BY 1,2,3,4,5,6,7,8,9,10;
-
-The ``array_to_string`` and ``array_agg`` function will do the trick.
-
 Listing All Triggers in a DB
 ----------------------------
 

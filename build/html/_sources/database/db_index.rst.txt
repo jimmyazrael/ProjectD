@@ -1,5 +1,5 @@
-Database Knowledge Base
-=======================
+Database
+========
 
 .. toctree::
 

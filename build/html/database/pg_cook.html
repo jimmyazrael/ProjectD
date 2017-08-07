@@ -94,8 +94,12 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">This is Project D!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/py_index.html">Database Knowledge Base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webdev/web_index.html">Database Knowledge Base</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="db_index.html">Database Knowledge Base</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Cooking Postgresql</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-autoincre-sequence">Create Autoincre Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transpose-results">Transpose Results</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#listing-all-triggers-in-a-db">Listing All Triggers in a DB</a></li>
 </ul>
 </li>
@@ -171,6 +175,28 @@
   <div class="section" id="cooking-postgresql">
 <h1>Cooking Postgresql<a class="headerlink" href="#cooking-postgresql" title="Permalink to this headline">¶</a></h1>
 <p>All kinds of litte tricks.</p>
+<div class="section" id="create-autoincre-sequence">
+<h2>Create Autoincre Sequence<a class="headerlink" href="#create-autoincre-sequence" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-psql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">SEQUENCE</span> <span class="n">memotender_pk_seq</span><span class="p">;</span>  <span class="cm">/* Note thers&#39;s no quote here */</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">memotender</span> <span class="k">ALTER</span> <span class="n">pk</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="n">NEXTVAL</span><span class="p">(</span><span class="s1">&#39;memotender_pk_seq&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Although any name for the sequence can be used, convention is to use
+<code class="docutils literal"><span class="pre">TABLE_NAME</span> <span class="pre">+</span> <span class="pre">COLUMN_NAME</span> <span class="pre">+</span> <span class="pre">'seq'</span></code>.</p>
+</div>
+<div class="section" id="transpose-results">
+<h2>Transpose Results<a class="headerlink" href="#transpose-results" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-psql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">mm</span><span class="mf">.</span><span class="o">*</span><span class="p">,</span>
+        <span class="n">array_to_string</span><span class="p">(</span><span class="n">array_agg</span><span class="p">(</span><span class="n">mt</span><span class="mf">.</span><span class="n">tendertypenamezh</span><span class="p">),</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">tender</span><span class="p">,</span>
+        <span class="n">array_to_string</span><span class="p">(</span><span class="n">array_agg</span><span class="p">(</span><span class="n">mt</span><span class="mf">.</span><span class="n">amount</span><span class="p">),</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">tenderamount</span>
+<span class="k">FROM</span> <span class="n">transaction_memo</span> <span class="n">mm</span>
+<span class="k">LEFT</span> <span class="k">OUTER</span> <span class="k">JOIN</span> <span class="n">memotender</span> <span class="n">mt</span> <span class="k">ON</span> <span class="n">mt</span><span class="mf">.</span><span class="n">memopk</span> <span class="o">=</span> <span class="n">mm</span><span class="mf">.</span><span class="n">pk</span>
+<span class="k">WHERE</span>  <span class="k">valid</span> <span class="o">=</span> <span class="s1">&#39;t&#39;</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">6</span><span class="p">,</span><span class="mf">7</span><span class="p">,</span><span class="mf">8</span><span class="p">,</span><span class="mf">9</span><span class="p">,</span><span class="mf">10</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">array_to_string</span></code> and <code class="docutils literal"><span class="pre">array_agg</span></code> function will do the trick.</p>
+</div>
 <div class="section" id="listing-all-triggers-in-a-db">
 <h2>Listing All Triggers in a DB<a class="headerlink" href="#listing-all-triggers-in-a-db" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-psql"><div class="highlight"><pre><span></span><span class="k">select</span> <span class="n">trg</span><span class="mf">.</span><span class="n">tgname</span><span class="p">,</span>
