@@ -111,6 +111,7 @@ html_static_path = ['_static']
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'ProjectDdoc'
 
+html_show_sphinx = False
 
 # -- Options for LaTeX output ---------------------------------------------
 

@@ -5,13 +5,16 @@ All kinds of litte tricks.
 
 .. highlight:: psql
 
-Create Autoincre Sequence
+Create/Reset Autoincre Sequence
 -------------------------
 
 .. code-block:: psql
 
 	CREATE SEQUENCE memotender_pk_seq;  /* Note thers's no quote here */
 	ALTER TABLE memotender ALTER pk SET DEFAULT NEXTVAL('memotender_pk_seq');
+
+  /* Reset it to start from 1 */
+  ALTER SEQUENCE memotender_pk_seq RESTART WITH 1;
 
 Although any name for the sequence can be used, convention is to use 
 ``TABLE_NAME + COLUMN_NAME + 'seq'``.
@@ -36,7 +39,7 @@ Listing All Triggers in a DB
 
 .. code-block:: psql
 
-	select trg.tgname,
+	SELECT trg.tgname,
         CASE trg.tgtype::integer & 66
             WHEN 2 THEN 'BEFORE'
             WHEN 64 THEN 'INSTEAD OF'
@@ -67,3 +70,26 @@ Listing All Triggers in a DB
 	WHERE trg.tgname not like 'RI_ConstraintTrigger%'
 	  AND trg.tgname not like 'pg_sync_pg%';
 
+Reload Configuration
+--------------------
+
+Option 1: From the command-line shell
+
+.. code-block:: bash
+
+    su - postgres
+    /usr/bin/pg_ctl reload
+
+Option 2: Using SQL
+
+.. code-block:: psql
+
+    SELECT pg_reload_conf();
+
+Find Out the Columns and Datatypes of A Table
+---------------------------------------------
+
+.. code-block:: psql
+
+    select column_name, data_type, character_maximum_length
+    from INFORMATION_SCHEMA.COLUMNS where table_name = '<name of table>';

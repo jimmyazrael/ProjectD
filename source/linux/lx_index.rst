@@ -1,0 +1,6 @@
+Linux
+=====
+
+.. toctree::
+	git
+	tricks

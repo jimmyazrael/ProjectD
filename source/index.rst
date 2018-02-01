@@ -14,6 +14,7 @@ Welcome to Project D!
    python/py_index.rst
    webdev/web_index.rst
    database/db_index.rst
+   linux/lx_index.rst
 
 
 Indices and tables
